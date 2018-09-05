@@ -1,0 +1,132 @@
+version: '3'
+services:
+  replicaset1n1:
+    container_name: replicaset1n1
+    image: mongo:4.0.1-xenial
+    command: mongod --shardsvr --replSet rs1 --dbpath /data/db --bind_ip_all --port 27017
+    depends_on:
+      - config1
+      - config2
+      - config3
+    volumes:
+      - ./mongo_cluster/data1:/data/db
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - mongo
+
+  replicaset1n2:
+    container_name: replicaset1n2
+    image: mongo:4.0.1-xenial
+    command: mongod --shardsvr --replSet rs1 --dbpath /data/db --bind_ip_all --port 27017
+    depends_on:
+      - config1
+      - config2
+      - config3
+    volumes:
+      - ./mongo_cluster/data2:/data/db
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - mongo
+
+  replicaset1n3:
+    container_name: replicaset1n3
+    image: mongo:4.0.1-xenial
+    command: mongod --shardsvr --replSet rs1 --dbpath /data/db --bind_ip_all --port 27017
+    depends_on:
+      - config1
+      - config2
+      - config3
+    volumes:
+      - ./mongo_cluster/data3:/data/db
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - mongo
+
+  config1:
+    container_name: config1
+    image: mongo:4.0.1-xenial
+    command: mongod --configsvr --replSet rs1config --dbpath /data/db --bind_ip_all --port 27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mongo_cluster/config1:/data/db
+    networks:
+      - mongo
+
+  config2:
+    container_name: config2
+    image: mongo:4.0.1-xenial
+    command: mongod --configsvr --replSet rs1config --dbpath /data/db --bind_ip_all --port 27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mongo_cluster/config2:/data/db
+    networks:
+      - mongo
+
+  config3:
+    container_name: config3
+    image: mongo:4.0.1-xenial
+    command: mongod --configsvr --replSet rs1config --dbpath /data/db --bind_ip_all --port 27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mongo_cluster/config3:/data/db
+    networks:
+      - mongo
+
+  router1:
+    container_name: router1
+    image: mongo:4.0.1-xenial
+    command: mongos --configdb rs1config/config1:27017,config2:27017,config3:27017 --bind_ip_all --port 27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - mongo
+
+  router2:
+    container_name: router2
+    image: mongo:4.0.1-xenial
+    command: mongos --configdb rs1config/config1:27017,config2:27017,config3:27017 --bind_ip_all --port 27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - mongo
+
+  producer:
+    container_name: producer
+    build:
+      context: ./producer/
+    volumes:
+      - ./producer:/app
+    depends_on:
+      - rabbit
+      - consumer
+    networks:
+      - queue
+
+  consumer:
+    container_name: consumer
+    build:
+      context: ./consumer/
+    volumes:
+      - ./consumer:/app
+    depends_on:
+      - rabbit
+    networks:
+      - queue
+      - mongo
+
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:3.7.7-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=bunny
+      - RABBITMQ_DEFAULT_PASS=harepass
+    ports:
+      - 8080:15672
+    networks:
+      - queue
+
+networks:
+  mongo:
+    external: true
+  queue:
+    external: true

@@ -1,0 +1,1 @@
+rs.initiate({_id : 'rs1', members: [{ _id : 0, host : 'replicaset1n1' },{ _id : 1, host : 'replicaset1n2' },{ _id : 2, host : 'replicaset1n3' }]});

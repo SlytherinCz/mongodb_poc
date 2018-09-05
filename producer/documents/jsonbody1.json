@@ -1,0 +1,43 @@
+{
+  "survey_id":128,
+  "listOfStrings": [
+    "foo",
+    "bar"
+  ],
+  "multipleChoicesList": [
+    "foo",
+    "bar"
+  ],
+  "fixedItemsList": [
+    "Some text",
+    true,
+    123
+  ],
+  "nestedList": [
+    [
+      "lorem",
+      "ipsum"
+    ],
+    [
+      "dolor"
+    ]
+  ],
+  "unorderable": [
+    "one",
+    "two"
+  ],
+  "unremovable": [
+    "one",
+    "two"
+  ],
+  "noToolbar": [
+    "one",
+    "two"
+  ],
+  "fixedNoToolbar": [
+    42,
+    true,
+    "additional item one",
+    "additional item two"
+  ]
+}
