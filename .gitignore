@@ -1,2 +1,6 @@
 .idea
 mongo_cluster
+grafana
+influxdb
+consumer/db-pusher/node_modules
+consumer/overseer/node_modules

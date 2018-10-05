@@ -1,0 +1,13 @@
+{
+  "name": "mongo-poc-db-pusher",
+  "version": "0.0.1",
+  "description": "RabbitMQ consumer pushing data to MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "mongodb": "~3.0.11",
+    "amqplib": "~0.5.2"
+  }
+}

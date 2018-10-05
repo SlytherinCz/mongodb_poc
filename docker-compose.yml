@@ -125,8 +125,50 @@ services:
     networks:
       - queue
 
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+    networks:
+      - monitoring
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    environment:
+      - INFLUXDB_DATA_ENGINE=tsm1
+      - INFLUXDB_REPORTING_DISABLED=false
+    ports:
+      - 8083:8083
+      - 8086:8086
+      - 8090:8090
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb
+    networks:
+      - monitoring
+
+  telegraf:
+    container_name: telegraf
+    image: telegraf:latest
+    links:
+      - influxdb
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      - monitoring
+      - queue
+      - mongo
+
+
 networks:
   mongo:
     external: true
   queue:
+    external: true
+  monitoring:
     external: true

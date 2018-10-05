@@ -1,0 +1,7 @@
+apps:
+  - script   : db-pusher/app.js
+    instances: 1
+    exec_mode: cluster
+  - script   : overseer/overseer.js
+    instances: 1
+    exec_mode: cluster

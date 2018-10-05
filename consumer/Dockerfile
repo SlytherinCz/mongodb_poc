@@ -1,11 +1,13 @@
-FROM python:3.6-alpine
+FROM keymetrics/pm2:10-alpine
 
 COPY . /app
+WORKDIR /app/db-pusher
+
+RUN npm install
+
+WORKDIR /app/overseer
+
+RUN npm install
+
 WORKDIR /app
-
-RUN pip install -r requirements.txt &&\
-    apk add supervisor
-
-COPY ./supervisord.conf ./etc/supervisor/supervisord.conf
-
-CMD ["/usr/bin/supervisord"]
+CMD [ "pm2-runtime", "start", "config.yml" ]

@@ -36,4 +36,3 @@ message_properties = pika.BasicProperties(app_id='test', content_type='applicati
 
 for i in range(0, document_count):
     channel.basic_publish(EXCHANGE, ROUTING_KEY, random.choice(json_bodies))
-    time.sleep(0.005)

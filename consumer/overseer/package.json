@@ -1,0 +1,13 @@
+{
+  "name": "mongo-poc-process-watcher",
+  "version": "0.0.1",
+  "description": "Scaling tool for dynamically reacting to RabbitMQ queue length",
+  "main": "overseer.js",
+  "scripts": {
+    "start": "node overseer.js"
+  },
+  "dependencies": {
+    "pm2": "~3.0.4",
+    "axios": "0.18.0"
+  }
+}
